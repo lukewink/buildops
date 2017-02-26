@@ -3,7 +3,9 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
-    url(r'^builds/$', views.BuildsHandler.as_view()),
+    url(r'^$', views.api_root),
+    url(r'^builds$', views.BuildsHandler.as_view(), name='build-list'),
+    url(r'^builds/([0-9]+)$', views.BuildHandler.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

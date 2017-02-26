@@ -1,8 +1,10 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from builds.models import Component, VersionBase, Build, NewBuild
 from builds.serializers import ComponentSerializer, VersionBaseSerializer, BuildSerializer, NewBuildSerializer
 
@@ -34,7 +36,9 @@ class BuildsHandler(APIView):
 
             # Serialize the newly created build to return as the response data
             build_serializer = BuildSerializer(build)
-            return Response(build_serializer.data, status=status.HTTP_201_CREATED)
+            response = Response(build_serializer.data, status=status.HTTP_201_CREATED)
+            response['Location'] = 'abcd'
+            return response
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -74,4 +78,14 @@ class BuildsHandler(APIView):
             number=new_build_number
         )
         build.save()
+
         return build
+
+class BuildHandler(APIView):
+    """Handles API requests to get a single Build"""
+
+    def get(self, request, pk, format=None):
+        build = get_object_or_404(Build, pk=pk)
+        serializer = BuildSerializer(build)
+        return Response(serializer.data)
+
