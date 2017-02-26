@@ -1,35 +1,35 @@
 from rest_framework import serializers
-from builds.models import Application, Version, Build, NewBuild
+from builds.models import Component, VersionBase, Build, NewBuild
 
-class ApplicationSerializer(serializers.ModelSerializer):
+class ComponentSerializer(serializers.ModelSerializer):
     """Serializer for the Application model"""
     versions = serializers.StringRelatedField(many=True)
     class Meta:
-        model = Application
+        model = Component
         fields = ('name', 'versions',)
 
-class VersionSerializer(serializers.ModelSerializer):
+class VersionBaseSerializer(serializers.ModelSerializer):
     """Serializer for the Version model"""
     builds = serializers.StringRelatedField(many=True)
     class Meta:
-        model = Version
-        fields = ('version', 'builds')
+        model = VersionBase
+        fields = ('value', 'builds')
     
 
 class BuildSerializer(serializers.ModelSerializer):
     """Serializer for the Build model"""
-    application = serializers.ReadOnlyField(source='application_name')
-    version = serializers.SlugRelatedField(
+    component = serializers.ReadOnlyField(source='component_name')
+    version_base = serializers.SlugRelatedField(
         many=False, 
         read_only=True,
-        slug_field='version'
+        slug_field='value'
     )
     class Meta:
         model = Build
-        fields = ('application', 'version', 'branch', 'time', 'revision', 'number')
+        fields = ('component', 'version_base', 'branch', 'time', 'revision', 'number')
     
 class NewBuildSerializer(serializers.ModelSerializer):
     """Serializer for the NewBuild model"""
     class Meta:
         model = NewBuild
-        fields = ('application', 'version', 'branch', 'revision',)
+        fields = ('component', 'version_base', 'branch', 'revision',)
