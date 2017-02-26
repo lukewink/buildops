@@ -1,5 +1,5 @@
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "verstore.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "buildops.settings")
 
 import django
 django.setup()
