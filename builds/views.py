@@ -56,7 +56,10 @@ class BuildsHandler(APIView):
             # Serialize the newly created build to return as the response data
             build_serializer = BuildSerializer(build)
             response = Response(build_serializer.data, status=status.HTTP_201_CREATED)
-            response['Location'] = 'abcd'
+
+            # Set the Location header to the URL of the newly created build.  The reverse function
+            # looks up a urlpattern by a name.
+            response['Location'] = reverse('build', args=[build.pk], request=request, format=format)
             return response
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -74,7 +77,7 @@ class BuildsHandler(APIView):
         
         # Get/Create the VersionBase model that is associated with the new build.
         version_base, _ = VersionBase.objects.get_or_create(
-            value__iexact=new_build.version_base,
+            value=new_build.version_base,
             component=component,
             defaults={'value' : new_build.version_base, 'component' : component}
         )
