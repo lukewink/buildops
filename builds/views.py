@@ -14,13 +14,32 @@ def api_root(request, format=None):
         'builds': reverse('build-list', request=request, format=format),
     })
 
+class ComponentsHandler(APIView):
+    """Handles API requests to get all Components that have an associated Build"""
+
+    def get(self, request, format=None):
+        components = Component.objects.all()
+        serializer = ComponentSerializer(components, many = True)
+        return Response(serializer.data)
+
+class VersionsHandler(APIView):
+    """ Handles API requests to get all the Versions"""
+
+    def get(self, request, format=None):
+        query = VersionBase.objects.all()
+        component = request.query_params.get('component', None)
+        if component is not None:
+            query = query.filter(component__name__iexact=component)
+        serializer = VersionBaseSerializer(query, many=True)
+        return Response(serializer.data)
+
 class BuildsHandler(APIView):
     """Handles API requests to get and create builds."""
 
     def get(self, request, format=None):
         """Get all the builds in the database"""
         builds = Build.objects.all()
-        serializer = BuildSerializer(builds, many = True)
+        serializer = BuildSerializer(builds, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -56,6 +75,7 @@ class BuildsHandler(APIView):
         # Get/Create the VersionBase model that is associated with the new build.
         version_base, _ = VersionBase.objects.get_or_create(
             value__iexact=new_build.version_base,
+            component=component,
             defaults={'value' : new_build.version_base, 'component' : component}
         )
 
