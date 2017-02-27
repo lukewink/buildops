@@ -9,9 +9,10 @@ class Component(models.Model):
 
     Attributes:
         name    The name of the component.  Lookups on the componenet name 
-                will be case insensitive.
+                will be case insensitive.  The stored value is always lower
+                case.
     """
-    name = models.CharField(max_length=200)
+    name = models.CharField(db_index=True, unique=True, max_length=200)
 
     def __str__(self):
         return self.name
@@ -31,7 +32,7 @@ class VersionBase(models.Model):
                     increased.
     """
     component = models.ForeignKey(Component, on_delete=models.CASCADE, related_name='versions')
-    value = models.CharField(max_length=25)
+    value = models.CharField(db_index=True, max_length=25)
     next_number = models.IntegerField(default=1)
 
     def __str__(self):
@@ -54,7 +55,7 @@ class Build(models.Model):
     branch = models.CharField(max_length=200)
     time = models.DateTimeField('Build time', auto_now_add=True)
     revision = models.CharField(max_length=100)
-    number = models.IntegerField(default=1)
+    number = models.IntegerField()
 
     def __str__(self):
         return '%s %s %s %s %s' % (self.version_base, self.branch, self.time, self.revision, self.number)

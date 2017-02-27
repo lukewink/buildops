@@ -3,11 +3,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.api_root),
-    url(r'^builds$', views.BuildsHandler.as_view(), name='build-list'),
-    url(r'^builds/([0-9]+)$', views.BuildHandler.as_view(), name='build'),
-    url(r'^components$', views.ComponentsHandler.as_view(), name='component-list'),
-    url(r'^versions$', views.VersionsHandler.as_view(), name='version-list'),
+    url(r'^$', views.index),
+    url(r'^api$', views.api_root),
+    url(r'^search$', views.search, name='search'),
+    url(r'^api/builds$', views.BuildsHandler.as_view(), name='build-list'),
+    url(r'^api/builds/([0-9]+)$', views.BuildHandler.as_view(), name='build'),
+    url(r'^api/components$', views.ComponentsHandler.as_view(), name='component-list'),
+    url(r'^api/versions$', views.VersionsHandler.as_view(), name='version-list'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

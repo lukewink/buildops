@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -7,6 +8,16 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from builds.models import Component, VersionBase, Build, NewBuild
 from builds.serializers import ComponentSerializer, VersionBaseSerializer, BuildSerializer, NewBuildSerializer
+
+@api_view(['GET'])
+def index(request, format=None):
+    return render(request, 'builds/index.html', {})
+
+@api_view(['GET'])
+def search(request, format=None):
+    return Response({
+        'message': 'got search'
+    })
 
 @api_view(['GET'])
 def api_root(request, format=None):
@@ -29,7 +40,7 @@ class VersionsHandler(APIView):
         query = VersionBase.objects.all()
         component = request.query_params.get('component', None)
         if component is not None:
-            query = query.filter(component__name__iexact=component)
+            query = query.filter(component__name=component.lower())
         serializer = VersionBaseSerializer(query, many=True)
         return Response(serializer.data)
 
@@ -71,8 +82,8 @@ class BuildsHandler(APIView):
         # Note that the query is case insensitive on the name.  This way 'VxStorage'
         # and 'vxstorage' will refer to the same Application.
         component, _ = Component.objects.get_or_create(
-            name__iexact=new_build.component,
-            defaults={'name' : new_build.component}
+            name=new_build.component.lower(),
+            defaults={'name' : new_build.component.lower()}
         )
         
         # Get/Create the VersionBase model that is associated with the new build.
