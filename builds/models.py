@@ -52,9 +52,9 @@ class Build(models.Model):
         number          The build number.
     """
     version_base = models.ForeignKey(VersionBase, on_delete=models.CASCADE, related_name='builds')
-    branch = models.CharField(max_length=200)
+    branch = models.CharField(max_length=200, blank=True, null=True)
     time = models.DateTimeField('Build time', auto_now_add=True)
-    revision = models.CharField(max_length=100)
+    revision = models.CharField(max_length=100, blank=True, null=True)
     number = models.IntegerField()
 
     def __str__(self):
@@ -75,11 +75,11 @@ class NewBuild(models.Model):
     """NewBuild is used to create a new Build"""
     component = models.CharField(max_length=200)
     version_base = models.CharField(max_length=25)
-    branch = models.CharField(max_length=200)
-    revision = models.CharField(max_length=100)
+    branch = models.CharField(max_length=200, blank=True, null=True)
+    revision = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return '%s %s %s %s' % (component, version_base, branch, revision,)
+        return '%s %s %s %s' % (self.component, self.version_base, self.branch, self.revision,)
 
     class Meta:
         """This model is only used to create new Build objects.  It is not persisted"""
