@@ -1,0 +1,31 @@
+{% extends "builds/base.html" %}
+
+{% block content %}
+    <h1>Getting Started</h1>
+    <hr>
+    <p>This service works by allowing clients to POST new builds via HTTP.  The server will then save the POSTed build
+       information and generate a build number for that build.</p>
+    <p>New builds are added by making a HTTP POST to <a href>{{ builds_handler }}</a>.  The Content-Type of the POST
+       should be application/json and the POST data should look like:
+        <code class="prettyprint">
+            <pre>
+                {
+                    "component" : "vxstorage",
+                    "version_base" : "1.12.1",
+                    "branch" : "master",
+                    "revision" : "dd67c3af83b0571cea6bd799b20a58344df825f5"
+                }
+            </pre>
+        </code>
+        <ul>
+            <li><b>component:</b> The name of the component being built.  This value is case insensitive ("VxStorage"
+                                  and "vxstorage") will match each other.</li>
+            <li><b>version_base:</b> This is the version of the component being built (with no build number included of
+                                     course.  This will typically be 3 numbers: <i>major.minor.patch</i></li>
+            <li><b>branch:</b> An optional field specifying which branch the build is coming from.</li>
+            <li><b>revision:</b> An optional field specifying the revision of the source code.</li>
+        </ul>
+    </p>
+    <p>If successful, the result of the POST will be the newly create Build object.  This Build object will contain
+       the assigned build number.</p>
+{% endblock %}

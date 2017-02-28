@@ -9,15 +9,26 @@ from rest_framework.reverse import reverse
 from builds.models import Component, VersionBase, Build, NewBuild
 from builds.serializers import ComponentSerializer, VersionBaseSerializer, BuildSerializer, NewBuildSerializer
 
+def get_template_context(request, format):
+    context = {
+        'builds_handler': reverse('build-list', request=request, format=format),
+        'home_url': reverse('index', request=request, format=format),
+        'getting_started_url': reverse('getting-started', request=request, format=format),
+    }
+    return context
 @api_view(['GET'])
 def index(request, format=None):
-    return render(request, 'builds/index.html', {})
+    return render(request, 'builds/index.html', get_template_context(request, format))
 
 @api_view(['GET'])
 def search(request, format=None):
     return Response({
         'message': 'got search'
     })
+
+@api_view(['GET'])
+def getting_started(request, format=None):
+    return render(request, 'builds/getting_started.html', get_template_context(request, format))
 
 @api_view(['GET'])
 def api_root(request, format=None):

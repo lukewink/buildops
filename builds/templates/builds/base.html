@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <title>{%  block title %}BuildOps{% endblock %}</title>
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name=Description lang=en content="ADD SITE DESCRIPTION">
+    <meta name=author content="ADD AUTHOR INFORMATION">
+    <meta name=robots content="index, follow">
+    <link rel=apple-touch-icon href="assets/img/apple-touch-icon.png">
+    <link rel="shortcut icon" href=favicon.ico>
+    <link rel=stylesheet href="{% static "css/styles.css" %}">
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+</head>
+<body>
+<div class=container>
+    <div class=header>
+        <h1 class=header-heading>BuildOps</h1>
+    </div>
+    <div class=nav-bar>
+        <ul class=nav>
+            <li><a href="/">Home</a></li>
+            <li><a href="{{ getting_started_url }}">Getting Started</a></li>
+        </ul>
+    </div>
+    <div class=content>
+        <div class=main>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <div class=footer>
+        &copy; Copyright 2017
+    </div>
+</div>
+</body>
+</html>
