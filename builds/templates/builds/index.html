@@ -1,5 +1,22 @@
 {% extends "builds/base.html" %}
 
 {% block content %}
-Nothing here yet.  See <a href="{{ getting_started_url }}">Getting Started</a>.
+    <h1>What is Buildops</h1>
+    <hr>
+    <p>Buildops is a solution for people or organizations that are looking for a way to get an incrementing build
+        number for an application or component.  Version control systems like Git uses hashes instead of numbers (like
+        SVN) to represent a revision number, so there is no simple short number to use in a version to reference where
+        the artifact came from.  Build systems like Bamboo can solve this problem with a build number, but Bamboo will
+        reset a project's build number to 1 when a new branch project is configured.  This means if your last master
+        build was version 2.1.0.92, the branch's build would be 2.1.0.1 which is probably not what you want.
+    </p>
+    <p>Buildops attempts to solve the above problem by separating the build number from the build server and from the
+        version control system.  Buildops hosts a simple REST API that allows build scripts to easily retrieve a
+        build number based on the name of their component and the base version (base version is the version minus the
+        build number.  For instance if the version is 2.1.0.92, the base version is 2.1.0).  The server will also log
+        all the generated builds as well as the branch and revision (if the branch and revision are included in the
+        REST request).  This allows someone to look up the version on the buildops server and see the branch,
+        revision, and date that sourced the build.
+    </p>
+    <p>See <a href="{{ getting_started_url }}">Getting Started</a> to check it out.</p>
 {% endblock %}

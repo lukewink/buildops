@@ -10,7 +10,7 @@
         <code class="prettyprint">
             <pre>
                 {
-                    "component" : "vxstorage",
+                    "component" : "myapplication",
                     "version_base" : "1.12.1",
                     "branch" : "master",
                     "revision" : "dd67c3af83b0571cea6bd799b20a58344df825f5"
@@ -18,8 +18,8 @@
             </pre>
         </code>
         <ul>
-            <li><b>component:</b> The name of the component being built.  This value is case insensitive ("VxStorage"
-                                  and "vxstorage") will match each other.</li>
+            <li><b>component:</b> The name of the component being built.  This value is case insensitive ("MyApp"
+                                  and "myapp") will match each other.</li>
             <li><b>version_base:</b> This is the version of the component being built (with no build number included of
                                      course.  This will typically be 3 numbers: <i>major.minor.patch</i></li>
             <li><b>branch:</b> An optional field specifying which branch the build is coming from.</li>
@@ -28,4 +28,41 @@
     </p>
     <p>If successful, the result of the POST will be the newly create Build object.  This Build object will contain
        the assigned build number.</p>
+    <h2>Gradle Plugin</h2>
+    <p>The <a href="https://github.com/lukewink/buildops-gradle">buildops-gradle</a> plugin allows your Gradle build
+        process to easily retrieve a build number from a buildops server.</p>
+    <p>Using the plugin is easy:
+        <code class="prettyprint">
+            <pre>
+                buildscript {
+                  repositories {
+                    maven {
+                      url "http://jcenter.bintray.com"
+                    }
+                  }
+                  dependencies {
+                    compile 'com.lwink:buildops-gradle:1.0.0'
+                  }
+                }
+
+                task testGetBuildNumber {
+                  dependsOn getBuildNumber // getBuildNumber is a task defined in the Gradle plugin
+
+                  // Define the input parameters or in your gradle.properties file.  Some properties
+                  // (like buildopsRevision have been hard coded in this example, but would never be
+                  // hard coded in a real application
+                  buildopsUrl = "http://buildops-server"
+                  buildopsComponent = "MyComponent"
+                  buildopsVersionBase = "1.0.0"
+                  buildopsRevision = "d96a84e49c80abdda70a764e6c5f37c5fb110160"
+                  buildopsBranch = "master"
+                  doLast {
+                    // The task sets the returned build number in the project.buildopsBuildNumber
+                    // property
+                    println "Build Number: ${project.buildopsBuildNumber}"
+                  }
+                }
+            </pre>
+        </code>
+    </p>
 {% endblock %}
