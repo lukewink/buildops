@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'builds.apps.BuildsConfig',
     'rest_framework',
+    'webpack_loader',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -71,6 +72,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'buildops.wsgi.application'
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'builds/front_end/webpack-stats.json')
+    }
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
@@ -85,7 +93,7 @@ DATABASES = {
         'NAME': 'buildops',
         'USER': 'buildops',
         'PASSWORD': 'dbpassword',
-        'HOST': '127.0.0.1',
+        'HOST': '192.168.86.200',
         'PORT': '5432',
     }
 }
@@ -128,3 +136,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'assets'),
+)
+

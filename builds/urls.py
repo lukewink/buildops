@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^api$', views.api_root),
     url(r'^getting_started$', views.getting_started, name='getting-started'),
     url(r'^search$', views.search, name='search'),
+    url(r'^react$', views.react, name='react'),
     url(r'^api/builds$', views.BuildsHandler.as_view(), name='build-list'),
     url(r'^api/builds/([0-9]+)$', views.BuildHandler.as_view(), name='build'),
     url(r'^api/components$', views.ComponentsHandler.as_view(), name='component-list'),

@@ -21,6 +21,10 @@ def index(request, format=None):
     return render(request, 'builds/index.html', get_template_context(request, format))
 
 @api_view(['GET'])
+def react(request, format=None):
+    return render(request, 'builds/react.html', get_template_context(request, format))
+
+@api_view(['GET'])
 def search(request, format=None):
     return Response({
         'message': 'got search'
